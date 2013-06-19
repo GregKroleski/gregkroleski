@@ -44,8 +44,8 @@ path {
 
 // Set the dimensions of the canvas / graph
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 600 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
+    width = 800 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 // Parse the date / time
 var parseDate = d3.time.format("%Y").parse;
@@ -64,8 +64,9 @@ var yAxis = d3.svg.axis().scale(y)
 // Define the line
 var valueline = d3.svg.line()
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.record); });
-    
+    .y(function(d) { return y(d.record); })
+    .interpolate("monotone");
+
 // Adds the svg canvas
 var svg = d3.select("body")
     .append("svg")
@@ -75,10 +76,14 @@ var svg = d3.select("body")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // Get the data
-d3.tsv("data/data.tsv", function(error, data) {
+d3.csv("data/nflrecords.csv", function(error, data) {
     data.forEach(function(d) {
+        d.team = d.team;
         d.date = parseDate(d.date);
-        d.record = +d.record;
+        d.wins = +d.wins;
+        d.losses = +d.losses;
+        d.ties = +d.ties;
+        d.record = (+d.wins +d.ties) / (+d.wins +d.losses +d.ties);
     });
 
     // Scale the range of the data
@@ -100,6 +105,8 @@ d3.tsv("data/data.tsv", function(error, data) {
     svg.append("g")         // Add the Y Axis
         .attr("class", "y axis")
         .call(yAxis);
+
+    console.log(data)
 
 });
 
