@@ -67,6 +67,11 @@ var valueline = d3.svg.line()
     .y(function(d) { return y(d.record); })
     .interpolate("monotone");
 
+// Define the line
+var valueline2 = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.record); })
+
 // Adds the svg canvas
 var svg = d3.select("body")
     .append("svg")
@@ -74,6 +79,16 @@ var svg = d3.select("body")
         .attr("height", height + margin.top + margin.bottom)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// Filter to get Falcons data
+function isFalcons(array) {
+  return (array.team == "falcons");
+  }
+
+// Filter to get Saints data
+function isSaints(array) {
+  return (array.team == "aints");
+  }
 
 // Get the data
 d3.csv("data/nflrecords.csv", function(error, data) {
@@ -90,10 +105,20 @@ d3.csv("data/nflrecords.csv", function(error, data) {
     x.domain(d3.extent(data, function(d) { return d.date; }));
     y.domain([0, 1]);
 
+    var falconsdata = data.filter(isFalcons);
+    var saintsdata = data.filter(isSaints);
+
     // Add the valueline path.
     svg.append("path")      // Add the valueline path.
         .attr("class", "line")
-        .attr("d", valueline(data));
+        .style("stroke", "firebrick")
+        .attr("d", valueline(falconsdata));
+
+    // Add the valueline path.
+    svg.append("path")      // Add the valueline path.
+        .attr("class", "line")
+        .style("stroke", "darkgoldenrod")
+        .attr("d", valueline2(saintsdata));
 
     // Add the X Axis
     svg.append("g")         // Add the X Axis
@@ -105,8 +130,6 @@ d3.csv("data/nflrecords.csv", function(error, data) {
     svg.append("g")         // Add the Y Axis
         .attr("class", "y axis")
         .call(yAxis);
-
-    console.log(data)
 
 });
 
