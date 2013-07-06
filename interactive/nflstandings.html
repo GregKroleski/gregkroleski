@@ -21,7 +21,7 @@
 body { font: 12px Arial;}
 
 path { 
-    stroke: firebrick;
+    stroke: LightGray;
     stroke-width: 2;
     fill: none;
 }
@@ -36,7 +36,9 @@ path {
 
 </style>
 <body>
-<h1 align="center">NFL Win Percentages</h1>
+<div id="outer" style="width:100%">
+    <div id="inner" style="display:table;margin:0 auto;">
+<h1>NFL Win Percentages</h1>
 <!-- load the d3.js library --> 
 <script type="text/javascript" src="d3.v3/d3.v3.js"></script>
 
@@ -44,7 +46,7 @@ path {
 
 // Set the dimensions of the canvas / graph
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 800 - margin.left - margin.right,
+    width = 1400 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 // Parse the date / time
@@ -67,11 +69,6 @@ var valueline = d3.svg.line()
     .y(function(d) { return y(d.record); })
     .interpolate("monotone");
 
-// Define the line
-var valueline2 = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.record); })
-
 // Adds the svg canvas
 var svg = d3.select("body")
     .append("svg")
@@ -80,14 +77,21 @@ var svg = d3.select("body")
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// Filter to get Falcons data
-function isFalcons(array) {
+// Filter to get team data
+function getTeamData(array) {
   return (array.team == "falcons");
   }
 
-// Filter to get Saints data
-function isSaints(array) {
+function getTeamData2(array) {
+  return (array.team == "bills");
+  }
+
+function getTeamData3(array) {
   return (array.team == "aints");
+  }
+
+function getTeamData4(array) {
+  return (array.team == "bears");
   }
 
 // Get the data
@@ -105,20 +109,38 @@ d3.csv("data/nflrecords.csv", function(error, data) {
     x.domain(d3.extent(data, function(d) { return d.date; }));
     y.domain([0, 1]);
 
-    var falconsdata = data.filter(isFalcons);
-    var saintsdata = data.filter(isSaints);
+    var allteamdata = [];
 
-    // Add the valueline path.
-    svg.append("path")      // Add the valueline path.
-        .attr("class", "line")
-        .style("stroke", "firebrick")
-        .attr("d", valueline(falconsdata));
+    var teams = ["bills", "falcons", "aints", "panthers", "bears"];
+    //  teams.push(data.team);
+    console.log(teams)
 
-    // Add the valueline path.
-    svg.append("path")      // Add the valueline path.
-        .attr("class", "line")
-        .style("stroke", "darkgoldenrod")
-        .attr("d", valueline2(saintsdata));
+    var teamdata = data.filter(getTeamData);
+    var teamdata2 = data.filter(getTeamData2);
+    var teamdata3 = data.filter(getTeamData3);
+    var teamdata4 = data.filter(getTeamData4);
+    allteamdata.push(teamdata)
+    allteamdata.push(teamdata2)
+    allteamdata.push(teamdata3)
+    allteamdata.push(teamdata4)
+    console.log(allteamdata)
+
+    // Add the valueline path
+    svg.selectAll("path")
+        .data(allteamdata)
+        .enter()
+        .append("path")  // Add the valueline path.
+            .attr("class", "line")
+            .style("stroke", data.teamcolor)
+            .attr("d", function(d) {
+                return valueline(d);
+            })
+        .on("mouseover",function(d) {
+            d3.select(this).style("stroke", "Navy")
+        })
+        .on("mouseout",function(d) {
+            d3.select(this).style("stroke", "LightGray")
+        });
 
     // Add the X Axis
     svg.append("g")         // Add the X Axis
@@ -130,8 +152,9 @@ d3.csv("data/nflrecords.csv", function(error, data) {
     svg.append("g")         // Add the Y Axis
         .attr("class", "y axis")
         .call(yAxis);
-
 });
 
 </script>
+</div //inner>
+</div //outer>
 </body>
