@@ -94,8 +94,10 @@ function getTeamData4(array) {
   return (array.team == "bears");
   }
 
+
+
 // Get the data
-d3.csv("data/nflrecords.csv", function(error, data) {
+d3.csv("data/nflseasondata.csv", function(error, data) {
     data.forEach(function(d) {
         d.team = d.team;
         d.date = parseDate(d.date);
