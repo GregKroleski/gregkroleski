@@ -69,6 +69,34 @@ var valueline = d3.svg.line()
     .y(function(d) { return y(d.record); })
     .interpolate("monotone");
 
+// Filter to get team data
+function getTeamData(array) {
+  return (array.team == "falcons");
+  }
+
+// Get the team data and return the value line
+function teamValueline(NFLteam) {
+    //Load the CSV
+    d3.csv("data/nflseasondata.csv", function(datasetText) {
+    var parsedCSV = d3.csv.parseRows(datasetText);
+
+    console.log(parsedCSV)
+    });
+};
+/*        data.forEach(function(d) {
+            d.team = d.team;
+            d.date = parseDate(d.date);
+            d.wins = +d.wins;
+            d.losses = +d.losses;
+            d.ties = +d.ties;
+            d.record = (+d.wins +d.ties) / (+d.wins +d.losses +d.ties);
+        });
+    var valueLine = valueline(data.filter(getTeamData))
+        });
+    });
+};
+*/
+
 // Adds the svg canvas
 var svg = d3.select("body")
     .append("svg")
@@ -77,81 +105,46 @@ var svg = d3.select("body")
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// Filter to get team data
-function getTeamData(array) {
-  return (array.team == "falcons");
-  }
 
-function getTeamData2(array) {
-  return (array.team == "bills");
-  }
-
-function getTeamData3(array) {
-  return (array.team == "aints");
-  }
-
-function getTeamData4(array) {
-  return (array.team == "bears");
-  }
-
-
-
-// Get the data
-d3.csv("data/nflseasondata.csv", function(error, data) {
+// Iterate over each team and plot the line for that team
+d3.csv("data/nflteamdata.csv", function(error, data) {
     data.forEach(function(d) {
         d.team = d.team;
-        d.date = parseDate(d.date);
-        d.wins = +d.wins;
-        d.losses = +d.losses;
-        d.ties = +d.ties;
-        d.record = (+d.wins +d.ties) / (+d.wins +d.losses +d.ties);
+        d.color = d.color;
+        d.display_name = d.display_name;
     });
 
-    // Scale the range of the data
-    x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, 1]);
-
-    var allteamdata = [];
-
-    var teams = ["bills", "falcons", "aints", "panthers", "bears"];
-    //  teams.push(data.team);
-    console.log(teams)
-
-    var teamdata = data.filter(getTeamData);
-    var teamdata2 = data.filter(getTeamData2);
-    var teamdata3 = data.filter(getTeamData3);
-    var teamdata4 = data.filter(getTeamData4);
-    allteamdata.push(teamdata)
-    allteamdata.push(teamdata2)
-    allteamdata.push(teamdata3)
-    allteamdata.push(teamdata4)
-    console.log(allteamdata)
-
-    // Add the valueline path
+    // Add the valueline paths
     svg.selectAll("path")
-        .data(allteamdata)
+        .data(data)
         .enter()
         .append("path")  // Add the valueline path.
             .attr("class", "line")
-            .style("stroke", data.teamcolor)
+            .style("stroke", "black")
             .attr("d", function(d) {
-                return valueline(d);
+                teamValueline();
             })
         .on("mouseover",function(d) {
-            d3.select(this).style("stroke", "Navy")
+            d3.select(this).style("stroke", function(d) {
+                return d.color;
+            })
         })
         .on("mouseout",function(d) {
             d3.select(this).style("stroke", "LightGray")
         });
 
+    // Scale the range of the data
+    x.domain([parseDate("1920"), parseDate("2013")]);
+    y.domain([0, 1]);
+
     // Add the X Axis
-    svg.append("g")         // Add the X Axis
+    svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
     // Add the Y Axis
-    svg.append("g")         // Add the Y Axis
+    svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
 });
