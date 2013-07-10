@@ -1,33 +1,33 @@
-team,color
-cardinals,#870619
-falcons,#BD0D18
-ravens,#280353
-bills,#00338D
-panthers,#0088CE
-bears,#DD4814
-bengals,#FB4F14
-browns,#E34912
-cowboys,#002244
-broncos,#FB4F14
-lions,#006DB0
-packers,#213D30
-texans,#02253A
-colts,#003B7B
-jaguars,#007198
-chiefs,#B20032
-dolphins,#006666
-vikings,#3B0160
-patriots,#0D254C
-aints,#D2B887
-giants,#192F6B
-jets,#0C371D
-raiders,#000000
-eagles,#003B48
-steelers,#F2C800
-chargers,#5B92E5
-fortyniners,#AF1E2C
-seahawks,#4EAE47
-rams,#13264B
-buccaneers,#B20032
-titans,#648FCC
-redskins,#773141
+team,color,display_name
+cardinals,#870619,Arizona Cardinals
+falcons,#BD0D18,Atlanta Falcons
+ravens,#280353,Baltimore Ravens
+bills,#00338D,Buffalo Bills
+panthers,#0088CE,Carolina Panthers
+bears,#DD4814,Chicago Bears
+bengals,#FB4F14,Cincinnati Bengals
+browns,#E34912,Cleveland Browns
+cowboys,#002244,Dallas Cowboys
+broncos,#FB4F14,Denver Broncos
+lions,#006DB0,Detroit Lions
+packers,#213D30,Green Bay Packers
+texans,#02253A,Houston Texans
+colts,#003B7B,Indianapolis Colts
+jaguars,#007198,Jacksonville Jaguars
+chiefs,#B20032,Kansas City Chiefs
+dolphins,#006666,Miami Dolphins
+vikings,#3B0160,Minnesota Vikings
+patriots,#0D254C,New England Patriots
+aints,#D2B887,New Orleans Saints
+giants,#192F6B,New York Giants
+jets,#0C371D,New York Jets
+raiders,#000000,Oakland Raiders
+eagles,#003B48,Philadelphia Eagles
+steelers,#F2C800,Pittsburgh Steelers
+chargers,#5B92E5,San Diego Chargers
+fortyniners,#AF1E2C,San Francisco 49ers
+seahawks,#4EAE47,Seattle Seahawks
+rams,#13264B,St. Louis Rams
+buccaneers,#B20032,Tampa Bay Buccaneers
+titans,#648FCC,Tennessee Titans
+redskins,#773141,Washington Redskins
