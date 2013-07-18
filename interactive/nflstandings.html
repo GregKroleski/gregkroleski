@@ -36,14 +36,12 @@ path {
 
 </style>
 <body>
+
 <div id="outer" style="width:100%">
     <div id="inner" style="display:table;margin:0 auto;">
 <h1>NFL Win Percentages</h1>
-<!-- load the d3.js library --> 
-<script type="text/javascript" src="d3.v3/d3.v3.js"></script>
 
-<script>
-
+<script type="text/javascript">
 // Set the dimensions of the canvas / graph
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
     width = 1400 - margin.left - margin.right,
@@ -65,37 +63,9 @@ var yAxis = d3.svg.axis().scale(y)
 
 // Define the line
 var valueline = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.record); })
+    .x(function(d, i) { return x( parseDate(d.year), console.log( parseDate(d.year)), console.log(d.record) ) })
+    .y(function(d) { return y( d.record ) })
     .interpolate("monotone");
-
-// Filter to get team data
-function getTeamData(array) {
-  return (array.team == "falcons");
-  }
-
-// Get the team data and return the value line
-function teamValueline(NFLteam) {
-    //Load the CSV
-    d3.csv("data/nflseasondata.csv", function(datasetText) {
-    var parsedCSV = d3.csv.parseRows(datasetText);
-
-    console.log(parsedCSV)
-    });
-};
-/*        data.forEach(function(d) {
-            d.team = d.team;
-            d.date = parseDate(d.date);
-            d.wins = +d.wins;
-            d.losses = +d.losses;
-            d.ties = +d.ties;
-            d.record = (+d.wins +d.ties) / (+d.wins +d.losses +d.ties);
-        });
-    var valueLine = valueline(data.filter(getTeamData))
-        });
-    });
-};
-*/
 
 // Adds the svg canvas
 var svg = d3.select("body")
@@ -105,24 +75,24 @@ var svg = d3.select("body")
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var team_season_data;
 
 // Iterate over each team and plot the line for that team
-d3.csv("data/nflteamdata.csv", function(error, data) {
-    data.forEach(function(d) {
-        d.team = d.team;
-        d.color = d.color;
-        d.display_name = d.display_name;
-    });
+d3.json("data/nfl_team_season_data.json", function(error, json) {
+    if (error) return console.warn(error);
+        team_season_data = json;
 
     // Add the valueline paths
     svg.selectAll("path")
-        .data(data)
+        .data(team_season_data)
         .enter()
         .append("path")  // Add the valueline path.
             .attr("class", "line")
-            .style("stroke", "black")
+            .style("stroke", function(d) {
+                return d.color;
+            })
             .attr("d", function(d) {
-                teamValueline();
+                return valueline(d.seasons);
             })
         .on("mouseover",function(d) {
             d3.select(this).style("stroke", function(d) {
