@@ -82,6 +82,10 @@ d3.json("data/nfl_team_season_data.json", function(error, json) {
     if (error) return console.warn(error);
         team_season_data = json;
 
+    // Scale the range of the data
+    x.domain([parseDate("1919"), parseDate("2013")]);
+    y.domain([0, 1]);
+
     // Add the valueline paths
     svg.selectAll("path")
         .data(team_season_data)
@@ -102,10 +106,6 @@ d3.json("data/nfl_team_season_data.json", function(error, json) {
         .on("mouseout",function(d) {
             d3.select(this).style("stroke", "LightGray")
         });
-
-    // Scale the range of the data
-    x.domain([parseDate("1920"), parseDate("2013")]);
-    y.domain([0, 1]);
 
     // Add the X Axis
     svg.append("g")
