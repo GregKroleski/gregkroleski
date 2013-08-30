@@ -63,7 +63,7 @@ var yAxis = d3.svg.axis().scale(y)
 
 // Define the line
 var valueline = d3.svg.line()
-    .x(function(d, i) { return x( parseDate(d.year), console.log( parseDate(d.year)), console.log(d.record) ) })
+    .x(function(d, i) { return x( parseDate(d.year) )})
     .y(function(d) { return y( d.record ) })
     .interpolate("monotone");
 
