@@ -92,9 +92,7 @@ d3.json("data/nfl_team_season_data.json", function(error, json) {
         .enter()
         .append("path")  // Add the valueline path.
             .attr("class", "line")
-            .style("stroke", function(d) {
-                return d.color;
-            })
+            .style("stroke", "LightGray")
             .attr("d", function(d) {
                 return valueline(d.seasons);
             })
